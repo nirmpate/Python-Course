@@ -1,0 +1,175 @@
+#Nirmal Patel
+#Lab Practical 3
+
+
+class Property(object):
+    """Property class"""
+    property_list = []
+
+    def __init__(self, address, purchase_price = False):
+        #constructor
+        self.address = address
+        self.purchase_price = float(purchase_price)
+        self.current_value = float(purchase_price)
+        self.occupied = False
+        Property.property_list.append(self)
+
+    def __str__(self):
+        reply = ""
+        reply += "Property: "+ self.address
+        reply += "\n  Purchase Price: " + str(self.purchase_price)
+        reply += "\n  Current Value: "+ str(self.current_value)
+        reply += "\n  Occupied: "+str(self.occupied) + "\n"
+        return reply
+    
+##Returns a string with information on the property
+
+    def __cmp__(self, target):
+        if self.current_value > target.current_value:
+            return True
+##Compares the current value on two properties
+
+    def swap(self):
+        print "Swapping " + self.address +"'s Occupied Status\n"
+        self.occupied = True
+##Changes self.occupied to True so that the property is listed as occupied
+
+
+
+    @staticmethod
+    def print_all():
+        print "Current Properties are: \n"
+        for prop in Property.property_list:
+            print prop
+##This static method takes the global variable property_list and prints
+##the property information for each property
+
+    @staticmethod
+    def most_expensive():
+        print "The Most Expensive Property is:\n"
+        expensive = Property.property_list[0]
+        for prop in Property.property_list:
+            if expensive.current_value < prop.current_value:
+                expensive = prop
+
+        print expensive
+##This static method compares the current values of all the properties in property_list
+##and prints the most expensive one
+
+    @staticmethod
+    def good_investments():
+        print "The Properties that are worth more now are:\n"
+        for prop in Property.property_list:
+            if prop.purchase_price < prop.current_value:
+                print prop
+##This static method compares the purchase price and current value of each
+##property in property_list and prints out the ones that have a higher current
+##value than purchase price
+                
+                
+
+class CommercialProperty(Property):
+    """Child class for Property"""
+
+    def __init__(self, name, purchase_price, interest_rate):
+        super(CommercialProperty,self).__init__(name, purchase_price)
+        self.interest_rate = interest_rate
+    ##Use a super to bring the attributes from property
+
+    def __str__(self):
+        reply = super(CommercialProperty,self).__str__()
+        reply += "  Interest Rate: "+str(self.interest_rate) + "%\n"
+        return reply
+
+    def annual_update(self):
+            if self.current_value < float(200000):
+                self.current_value -= 10000
+            else:
+                self.current_value += round((self.current_value * (self.interest_rate * 0.01)),2)
+        ##If current value of property is over 200000 then the value increases by the
+        ##given interest rate.  If it is less then the value decreases by 10000
+        ##Use the round function to keep it in two decimal points!
+
+        
+            
+        
+
+            
+
+
+#Test Code for Part 1
+"""
+house = Property("1313 Bird Lane", 150321.32)
+store = Property("4362 Main Street", 210371.45)
+
+print "Welcome to the I210 Real Estate Tracker!"
+print "(This version was coded by N Patel",
+print ", with username 'nirmpate')\n"
+print "-" *60
+
+house.current_value += 3090.34
+
+print house
+print store
+
+print store > house, "\n"
+
+house.swap()
+
+print house
+"""
+
+#Test Code for Part 2
+"""
+house = Property("1313 Bird Lane", 150321.32)
+condo = Property("742 Green Ave", 99834.0)
+store = Property("4362 Main Street", 210371.45)
+
+print "Welcome to the I210 Real Estate Tracker!"
+print "(This version was coded by N Patel",
+print ", with username 'nirmpate')\n"
+print "-" *60
+
+house.swap()
+store.swap()
+
+house.current_value += 3090.34
+condo.current_value -= 2000.99
+store.current_value -= 15000.02
+
+Property.print_all()
+
+Property.most_expensive()
+
+Property.good_investments()
+"""
+
+#Test Code for Part 3
+
+store = CommercialProperty("4362 Main Street", 197502.45, 3)
+
+print "Welcome to the I210 Real Estate Tracker!"
+print "(This version was coded by N Patel",
+print ", with username 'nirmpate')\n"
+print "-" *60
+
+print store
+
+print "This Property loses value the first year: "
+store.annual_update()
+print store
+
+store.swap()
+
+print "The value then increases by $20000:"
+store.current_value += 20000
+print store
+
+print "After 10 years:"
+
+for i in range(10):
+    store.annual_update()
+
+print store
+
+
